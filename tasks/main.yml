@@ -1,0 +1,34 @@
+---
+- name: Some prerequisites
+  yum: name={{ item }} state=present
+  loop: [ "epel-release","unzip","wget" ]
+- yum: name="*" state=latest
+- yum: name=certbot state=present
+- lineinfile: line={{ PATH }} path=/etc/environment state=present
+- name: Disable SELinux
+  selinux: state=disabled
+- name: Download and extract Vault and Consul archives
+  unarchive: src={{ VAULT_URL }} dest=/usr/local/bin mode=744 remote_src=yes
+- name: Create vault user and group
+  group: name=vault state=present system=yes
+- user: name=vault create_home=no group=vault shell=/sbin/nologin system=yes
+- name: Change owner of Vault binary
+  file: path=/usr/local/bin/vault owner=vault 
+- name: Create Vault directories
+  file: path={{ item }} mode=0755 owner=vault state=directory
+  loop: [ "/etc/vault.d", "/var/lib/vault/data" ]
+- name: Creating Lets Encrypt certificates for Vault
+  command: certbot certonly --standalone -n -q --agree-tos -m georgepaunesco@gmail.com -d {{ DOMAIN_NAME }}
+- name: Create Vault service file
+  copy: src={{ VAULT_SERVICE }} dest=/etc/systemd/system/vault.service
+- name: Create Vault configuration file
+  template: src={{ VAULT_CONFIG }} dest=/etc/vault.d/vault.hcl
+- name: Start Vault service
+  service: name=vault state=started enabled=true
+- name: Set Vault env variable
+  lineinfile: path=/etc/environment line={{ VAULT_ENV}} state=present
+- name: Get master keys
+  command: vault operator init | tee /root/seal-keys
+  register: keys
+- debug: msg={{ keys.stdout }}
+

@@ -1,0 +1,7 @@
+---
+VAULT_URL: "https://releases.hashicorp.com/vault/1.5.4/vault_1.5.4_linux_amd64.zip"
+VAULT_CONFIG: "templates/vault/vault.hcl.j2"
+VAULT_SERVICE: "templates/vault/vault.service"
+PATH: "export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/centos/.local/bin:/home/centos/bin"
+DOMAIN_NAME: "acidburn.me"
+VAULT_ENV: "export VAULT_ADDR=https://acidburn.me:8200"

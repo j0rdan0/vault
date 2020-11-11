@@ -1,0 +1,17 @@
+galaxy_info:
+  author: j0rdan0
+  description: Ansible role to deploy and configure Hashicorp Vault on a RH based distro
+  license: GPL-2.0-or-later
+
+  min_ansible_version: 2.9
+
+
+  galaxy_tags:
+    hashicorp
+    vault
+    devops
+
+
+  dependencies:
+    j0rdan0.consul
+  
