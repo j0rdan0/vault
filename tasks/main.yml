@@ -17,8 +17,8 @@
 - name: Create Vault directories
   file: path={{ item }} mode=0755 owner=vault state=directory
   loop: [ "/etc/vault.d", "/var/lib/vault/data" ]
-- name: Creating Lets Encrypt certificates for Vault
-  command: certbot certonly --standalone -n -q --agree-tos -m georgepaunesco@gmail.com -d {{ DOMAIN_NAME }}
+#- name: Creating Lets Encrypt certificates for Vault
+#  command: certbot certonly --standalone -n -q --agree-tos -m georgepaunesco@gmail.com -d {{ DOMAIN_NAME }}
 - name: Create Vault service file
   copy: src={{ VAULT_SERVICE }} dest=/etc/systemd/system/vault.service
 - name: Create Vault configuration file
