@@ -28,7 +28,7 @@
 - name: Set Vault env variable
   lineinfile: path=/etc/environment line={{ VAULT_ENV}} state=present
 - name: Get master keys
-  command: vault operator init | tee /root/seal-keys
+  command: vault operator init > /root/seal-keys
   register: keys
 - debug: msg={{ keys.stdout }}
 
